@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const service = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: process.env.NEXT_PUBLIC_API_URL, 
 });
 
 export async function registerService(
@@ -30,6 +30,7 @@ export async function getUsersService(id: string) {
 
 export async function addMessageService(
     from: string, to: string, message: string, image: string
+    
 ) {
     return await service.post("add-message", {
         from,
