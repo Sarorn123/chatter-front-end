@@ -50,7 +50,11 @@ export default function Home() {
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
 
   useEffect(() => {
-    socket.current = io("http://localhost:5000");
+    const origin: string | undefined =
+      process.env.NODE_ENV === "development"
+        ? process.env.DEV_API_URL
+        : process.env.API_URL;
+    origin && (socket.current = io(origin));
   }, []);
 
   useEffect(() => {
@@ -241,7 +245,6 @@ export default function Home() {
                           alt={currentUser?.username || ""}
                         />
                       )}
-
                     </div>
                   </div>
                 ))}
