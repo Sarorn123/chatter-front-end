@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const service = axios.create({
-    baseURL: "https://chatter-express-ts.onrender.com",
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 export async function registerService(

@@ -52,8 +52,8 @@ export default function Home() {
   useEffect(() => {
     const origin: string | undefined =
       process.env.NODE_ENV === "development"
-        ? process.env.DEV_API_URL
-        : process.env.API_URL;
+        ? process.env.NEXT_PUBLIC_DEV_API_URL
+        : process.env.NEXT_PUBLIC_API_URL;
     origin && (socket.current = io(origin));
   }, []);
 
