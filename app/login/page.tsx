@@ -1,10 +1,12 @@
 "use client";
 
 import { loginService } from "@/help/api";
+import { checkAuth } from "@/help/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
+import PleaseWait from "../components/PleaseWait";
 
 interface IUser {
   _id: string;
@@ -17,6 +19,12 @@ const Login = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (checkAuth()) router.replace("/");
+    else setIsAuthLoading(false);
+  }, []);
 
   async function login() {
     if (username && password) {
@@ -37,7 +45,9 @@ const Login = () => {
     }
   }
 
-  return (
+  return isAuthLoading ? (
+    <PleaseWait />
+  ) : (
     <>
       <Toaster />
 
@@ -67,10 +77,8 @@ const Login = () => {
         </button>
 
         <Link href={"/register"}>
-          <button
-            className="mt-32 w-full border border-blue-600 px-4 py-2 rounded-md text-white active:bg-blue-500"
-          >
-           Go To Register
+          <button className="mt-32 w-full border border-blue-600 px-4 py-2 rounded-md text-white active:bg-blue-500">
+            Go To Register
           </button>
         </Link>
       </div>

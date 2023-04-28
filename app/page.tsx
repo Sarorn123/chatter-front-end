@@ -16,6 +16,7 @@ import moment from "moment";
 import EmojiPicker from "emoji-picker-react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import hi from "../images/hi.png";
+import PleaseWait from "./components/PleaseWait";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,6 +40,9 @@ interface IOnlineUSer {
 }
 
 export default function Home() {
+  const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true);
+  const [openSidebar, setOpenSidebar] = useState<boolean>(true);
+
   const socket = useRef<any>();
   const router = useRouter();
   const [onlineUsers, setOnlineUser] = useState<string[]>([]);
@@ -62,7 +66,7 @@ export default function Home() {
       socket.current.on("connect", () => {});
       socket.current.emit("add-user", currentUser._id);
 
-      // check only users
+      // check online users
       socket.current.on("online-users", (users: IOnlineUSer[]) => {
         const usersOnline = users.map((user) => user.userId);
         setOnlineUser(usersOnline);
@@ -78,6 +82,7 @@ export default function Home() {
   async function initUser() {
     if (checkAuth()) {
       setCurrentUser(await getCurrentUser());
+      setIsAuthLoading(false);
     } else {
       router.replace("/login");
     }
@@ -146,10 +151,15 @@ export default function Home() {
     }
   }
 
-  return (
+  return isAuthLoading ? (
+    <PleaseWait />
+  ) : (
     <main>
       <div className="flex justify-between h-screen">
-        <div className="w-[30%] lg:w-[20%] px-2 lg:px-10 flex flex-col justify-between">
+        <div
+          className={`fixed bg-blue-600 z-50 h-screen w-[70%] left-0 top-0 transition-all -translate-x-full
+            ${openSidebar && "translate-x-0"} md:static  md:w-[30%] lg:w-[20%] px-2 lg:px-10 flex flex-col justify-between`}
+        >
           <div>
             <h1 className="py-5 text-4xl font-bold">Chatter</h1>
 
@@ -197,16 +207,20 @@ export default function Home() {
         </div>
 
         {currentChatUser ? (
-          <div className="w-[70%] lg:w-[80%] px-2 lg:px-10 bg-gray-900 flex flex-col justify-between">
+          <div className=" md:w-[70%] lg:w-[80%] px-2 lg:px-10 bg-gray-900 flex flex-col justify-between">
             <div>
               <Header
                 username={currentChatUser.username}
                 avatar={currentChatUser.avatar}
                 isOnline={onlineUsers.includes(currentChatUser._id)}
+                setOpensidebar={setOpenSidebar}
               />
 
               {/* render message */}
-              <ScrollToBottom className=" overflow-auto h-[calc(100vh-10rem)]">
+              <ScrollToBottom
+                mode="bottom"
+                className="overflow-auto h-[calc(100vh-10rem)]"
+              >
                 {messages.map((result, index) => (
                   <div
                     key={index}
@@ -248,7 +262,6 @@ export default function Home() {
                     </div>
                   </div>
                 ))}
-
                 {messages.length === 0 && (
                   <p className="text-center mt-20">
                     Say something to your friend 😎💕
@@ -293,7 +306,7 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <div className="w-[70%] lg:w-[80%] px-2 lg:px-10 bg-gray-900 flex flex-col justify-center items-center">
+          <div className="md:w-[70%] lg:w-[80%] px-2 lg:px-10 bg-gray-900 flex flex-col justify-center items-center">
             <Image
               src={hi}
               alt="Start A Chat"
