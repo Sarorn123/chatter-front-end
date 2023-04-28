@@ -157,7 +157,7 @@ export default function Home() {
     <main>
       <div className="flex justify-between h-screen">
         <div
-          className={`fixed bg-blue-600 z-50 h-screen w-[70%] left-0 top-0 transition-all -translate-x-full
+          className={`fixed  bg-gray-700 z-50 h-screen w-[70%] left-0 top-0 transition-all -translate-x-full
             ${openSidebar && "translate-x-0"} md:static  md:w-[30%] lg:w-[20%] px-2 lg:px-10 flex flex-col justify-between`}
         >
           <div>
@@ -207,7 +207,7 @@ export default function Home() {
         </div>
 
         {currentChatUser ? (
-          <div className=" md:w-[70%] lg:w-[80%] px-2 lg:px-10 bg-gray-900 flex flex-col justify-between">
+          <div className="w-full md:w-[70%] lg:w-[80%] px-2 lg:px-10 bg-gray-900 flex flex-col justify-between">
             <div>
               <Header
                 username={currentChatUser.username}

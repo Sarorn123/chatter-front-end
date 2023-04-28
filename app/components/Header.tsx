@@ -28,7 +28,7 @@ const Header = ({ avatar, username, isOnline, setOpensidebar }: Props) => {
       </div>
 
       <p
-        className="text-2xl w-10 h-10 flex justify-center items-center rounded-full bg-gray-500 "
+        className="text-2xl w-10 h-10 flex justify-center items-center rounded-full bg-gray-500  md:hidden"
         onClick={() => {
           setOpensidebar((pre) => !pre);
         }}
